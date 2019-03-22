@@ -1,2 +1,8 @@
-operations:
-         serviceURL: https://redsky.target.com/v2/pdp/tcin/13860428?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics
+redskyService:
+         URL: https://redsky.target.com/v2/pdp/tcin/
+         params: ?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics
+server:
+  port: 8082
+
+myretailPrice:
+         URL: http://localhost:8080/productPrice/

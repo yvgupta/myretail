@@ -1,8 +1,10 @@
 package com.myretail.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Price {
 
     Double value;
@@ -28,6 +30,7 @@ public class Price {
     public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;
     }
+
     @Override
     public String toString() {
         return "CurrentPriceVO [value=" + value + ", currencyCode=" + currencyCode + "]";

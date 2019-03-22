@@ -1,5 +1,7 @@
 package com.myretail.controller;
 
+import com.myretail.exception.Error;
+import com.myretail.exception.Errors;
 import com.myretail.model.Price;
 import com.myretail.model.Product;
 import com.myretail.service.ProductService;
@@ -40,40 +42,47 @@ public class ProductControllerTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 	}
-	
+
 	@Test
 	public void getProductByIdTest() throws Exception{
-		
+
 		Product product = new Product();
 		Price currentPrice = new Price();
-		product.setProductId("13860428");
+		product.setProductId(13860428);
 		product.setName("The Big Lebowski (Blu-ray)");
 		currentPrice.setCurrencyCode("USD");
 		currentPrice.setValue(13.49);
 		product.setCurrentprice(currentPrice);
-		
-		Mockito.when(productService.getProductById(Mockito.anyString())).thenReturn(product);
+
+		Mockito.when(productService.getProductById(Mockito.anyLong())).thenReturn(product);
 		String prod_url = "/products/13860428";
 		RequestBuilder builder = MockMvcRequestBuilders.get(prod_url).accept(MediaType.APPLICATION_JSON_VALUE);
-		
+
 		MvcResult actual = mockMvc.perform(builder).andReturn();
-		
+
 		String expected = "{\"id\":\"13860428\",\"name\":\"The Big Lebowski (Blu-ray)\",\"current_price\":{\"value\": 13.49,\"currency_code\":\"USD\"}}";
-		
+
 		JSONAssert.assertEquals(expected, actual.getResponse().getContentAsString(), false);
 	}
 
-	@Test
-	public void getProductByWrongIdTest() throws Exception{
-		
-		//Mockito.when(productService.getProductById(Mockito.anyString())).thenThrow(new MyRetailException());
-		try {
-			String actual = mockMvc.perform(get("/products/123456")).andReturn().getResponse().getContentAsString();
-			assertEquals("", actual);;
-		
-		} catch (Exception e) {
-			logger.debug("Product not found Exception test sucess.");
-		}
-		
-	}
+    @Test
+    public void getProductByWrongIdTest() throws Exception{
+
+        Product product = new Product();
+        product.setProductId(16483589);
+        Errors errors = new Errors();
+        errors.getErrorList().add(new Error("404", "Product Details Not found"));
+        product.setErrors(errors);
+
+        Mockito.when(productService.getProductById(Mockito.anyLong())).thenReturn(product);
+        String prod_url = "/products/13860428";
+        RequestBuilder builder = MockMvcRequestBuilders.get(prod_url).accept(MediaType.APPLICATION_JSON_VALUE);
+
+        MvcResult actual = mockMvc.perform(builder).andReturn();
+
+        String expected = "{productId: 16483589, errors: { errorList: [ { errorCode: \"404\", errorDescription: \"Product Details Not found\"}]}}";
+
+        JSONAssert.assertEquals(expected, actual.getResponse().getContentAsString(), false);
+
+    }
 }

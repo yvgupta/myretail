@@ -1,30 +1,35 @@
 package com.myretail.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.myretail.exception.Errors;
 
-@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Product {
 
-    String productId;
+    private long productId;
 
-    String name;
+    private String name;
 
-    Price currentprice;
+    private Price currentprice;
+
+    private Errors errors;
 
     public Product() {
     }
 
-    public Product(String productId, Price currentprice) {
+    public Product(long productId, Price currentprice) {
         this.productId = productId;
         this.currentprice = currentprice;
     }
 
-    public String getProductId() {
+    public long getProductId() {
         return productId;
     }
 
-    public void setProductId(String productId) {
+    public void setProductId(long productId) {
         this.productId = productId;
     }
 
@@ -42,6 +47,14 @@ public class Product {
 
     public void setCurrentprice(Price currentprice) {
         this.currentprice = currentprice;
+    }
+
+    public Errors getErrors() {
+        return errors;
+    }
+
+    public void setErrors(Errors errors) {
+        this.errors = errors;
     }
 
     @Override
